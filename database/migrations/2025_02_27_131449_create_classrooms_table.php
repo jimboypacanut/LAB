@@ -12,7 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('classrooms', function (Blueprint $table) {
-            $table->id();
+            $table->integer('classroom_id')->primary();
+            $table->year('year');
+            $table->unsignedBigInteger('grade_id'); // Foreign key reference
+            $table->char('section', 2);
+            $table->boolean('status');
+            $table->string('remarks', 45);
+            $table->unsignedBigInteger('teacher_id'); // Foreign key reference
+
+            // Foreign key constraints
+            $table->foreign('grade_id')->references('id')->on('grades')->onDelete('cascade');
+            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
+
+            // Timestamps
             $table->timestamps();
         });
     }

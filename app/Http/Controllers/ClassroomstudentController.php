@@ -2,64 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\classroomstudent;
+use App\Models\ClassroomStudent;
 use Illuminate\Http\Request;
 
-class ClassroomstudentController extends Controller
+class ClassroomStudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response()->json(ClassroomStudent::all(), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        $record = ClassroomStudent::find($id);
+        if (!$record) {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+        return response()->json($record, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'classroom_id' => 'required|integer',
+            'student_id' => 'required|integer',
+        ]);
+
+        $record = ClassroomStudent::create($validatedData);
+        return response()->json($record, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(classroomstudent $classroomstudent)
+    public function update(Request $request, $id)
     {
-        //
+        $record = ClassroomStudent::find($id);
+        if (!$record) {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'classroom_id' => 'integer',
+            'student_id' => 'integer',
+        ]);
+
+        $record->update($validatedData);
+        return response()->json($record, 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(classroomstudent $classroomstudent)
+    public function destroy($id)
     {
-        //
-    }
+        $record = ClassroomStudent::find($id);
+        if (!$record) {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, classroomstudent $classroomstudent)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(classroomstudent $classroomstudent)
-    {
-        //
+        $record->delete();
+        return response()->json(['message' => 'Record deleted'], 200);
     }
 }

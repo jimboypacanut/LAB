@@ -11,9 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendances', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('attendance', function (Blueprint $table) {
+            $table->id(); // Auto-increment primary key
+            $table->date('date');
+            $table->unsignedBigInteger('student_id');
+            $table->boolean('status');
+            $table->text('remark')->nullable(); // Allows null remarks
+
+            // Foreign key constraint
+            $table->foreign('student_id')->references('student_id')->on('student')->onDelete('cascade');
+
+            $table->timestamps(); // Adds created_at and updated_at
         });
     }
 
@@ -22,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attendances');
+        Schema::dropIfExists('attendance');
     }
 };

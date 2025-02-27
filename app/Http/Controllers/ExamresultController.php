@@ -2,64 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\examresult;
+use App\Models\ExamResult;
 use Illuminate\Http\Request;
 
-class ExamresultController extends Controller
+class ExamResultController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the exam results.
      */
     public function index()
     {
-        //
+        return response()->json(ExamResult::all(), 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a newly created exam result.
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'exam_id' => 'required|exists:exams,id',
+            'student_id' => 'required|exists:students,id',
+            'course_id' => 'required|exists:courses,id',
+            'marks' => 'required|string|max:45',
+        ]);
+
+        $examResult = ExamResult::create($validatedData);
+        return response()->json($examResult, 201);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified exam result.
      */
-    public function show(examresult $examresult)
+    public function show($id)
     {
-        //
+        $examResult = ExamResult::find($id);
+        if (!$examResult) {
+            return response()->json(['message' => 'Exam Result not found'], 404);
+        }
+        return response()->json($examResult, 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified exam result.
      */
-    public function edit(examresult $examresult)
+    public function update(Request $request, $id)
     {
-        //
+        $examResult = ExamResult::find($id);
+        if (!$examResult) {
+            return response()->json(['message' => 'Exam Result not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'exam_id' => 'exists:exams,id',
+            'student_id' => 'exists:students,id',
+            'course_id' => 'exists:courses,id',
+            'marks' => 'string|max:45',
+        ]);
+
+        $examResult->update($validatedData);
+        return response()->json($examResult, 200);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified exam result from storage.
      */
-    public function update(Request $request, examresult $examresult)
+    public function destroy($id)
     {
-        //
-    }
+        $examResult = ExamResult::find($id);
+        if (!$examResult) {
+            return response()->json(['message' => 'Exam Result not found'], 404);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(examresult $examresult)
-    {
-        //
+        $examResult->delete();
+        return response()->json(['message' => 'Exam Result deleted'], 200);
     }
 }

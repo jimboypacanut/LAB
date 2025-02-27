@@ -11,9 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teachers', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create(table: 'teacher', callback: function (Blueprint $table): void {
+            $table->id(column: 'teacher_id'); // Auto-increment primary key
+            $table->string(column: 'email', length: 45)->unique();
+            $table->string(column: 'password', length: 255); // Increased length for hashed passwords
+            $table->string(column: 'fname', length: 45);
+            $table->string(column: 'lname', length: 45);
+            $table->date(column: 'dob');
+            $table->string(column: 'phone', length: 15)->nullable();
+            $table->string(column: 'mobile', length: 15)->nullable();
+            $table->boolean(column: 'status')->default(1);
+            $table->dateTime(column: 'last_login_date')->nullable();
+            $table->string(column: 'last_login_ip', length: 45)->nullable();
+            $table->timestamps(); // Adds created_at and updated_at fields
         });
     }
 
@@ -22,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teachers');
+        Schema::dropIfExists('teacher');
     }
 };

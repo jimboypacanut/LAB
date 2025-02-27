@@ -2,64 +2,76 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\grade;
+use App\Models\Grade;
 use Illuminate\Http\Request;
 
 class GradeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the grades.
      */
     public function index()
     {
-        //
+        return response()->json(Grade::all(), 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a newly created grade in storage.
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'grade_id' => 'required|integer|unique:grade,grade_id',
+            'name' => 'required|string|max:45',
+            'desc' => 'nullable|string|max:45',
+        ]);
+
+        $grade = Grade::create($validatedData);
+        return response()->json($grade, 201);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified grade.
      */
-    public function show(grade $grade)
+    public function show($id)
     {
-        //
+        $grade = Grade::find($id);
+        if (!$grade) {
+            return response()->json(['message' => 'Grade not found'], 404);
+        }
+        return response()->json($grade, 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified grade in storage.
      */
-    public function edit(grade $grade)
+    public function update(Request $request, $id)
     {
-        //
+        $grade = Grade::find($id);
+        if (!$grade) {
+            return response()->json(['message' => 'Grade not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'name' => 'string|max:45',
+            'desc' => 'nullable|string|max:45',
+        ]);
+
+        $grade->update($validatedData);
+        return response()->json($grade, 200);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified grade from storage.
      */
-    public function update(Request $request, grade $grade)
+    public function destroy($id)
     {
-        //
-    }
+        $grade = Grade::find($id);
+        if (!$grade) {
+            return response()->json(['message' => 'Grade not found'], 404);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(grade $grade)
-    {
-        //
+        $grade->delete();
+        return response()->json(['message' => 'Grade deleted'], 200);
     }
 }

@@ -2,64 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\exam;
+use App\Models\Exam;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the exams.
      */
     public function index()
     {
-        //
+        return response()->json(Exam::with('examType')->get(), 200);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a newly created exam.
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'exam_type_id' => 'required|exists:exam_type,exam_type_id',
+            'name' => 'required|string|max:45',
+            'start_date' => 'required|date',
+        ]);
+
+        $exam = Exam::create($validatedData);
+        return response()->json($exam, 201);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified exam.
      */
-    public function show(exam $exam)
+    public function show($id)
     {
-        //
+        $exam = Exam::with('examType')->find($id);
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found'], 404);
+        }
+        return response()->json($exam, 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified exam.
      */
-    public function edit(exam $exam)
+    public function update(Request $request, $id)
     {
-        //
+        $exam = Exam::find($id);
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'exam_type_id' => 'exists:exam_type,exam_type_id',
+            'name' => 'string|max:45',
+            'start_date' => 'date',
+        ]);
+
+        $exam->update($validatedData);
+        return response()->json($exam, 200);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified exam from storage.
      */
-    public function update(Request $request, exam $exam)
+    public function destroy($id)
     {
-        //
-    }
+        $exam = Exam::find($id);
+        if (!$exam) {
+            return response()->json(['message' => 'Exam not found'], 404);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(exam $exam)
-    {
-        //
+        $exam->delete();
+        return response()->json(['message' => 'Exam deleted'], 200);
     }
 }

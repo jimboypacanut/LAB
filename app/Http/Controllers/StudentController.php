@@ -2,64 +2,82 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\student;
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Get all students
     public function index()
     {
-        //
+        return response()->json(Student::all(), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Get a single student by ID
+    public function show($id)
     {
-        //
+        $student = Student::find($id);
+        if (!$student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+        return response()->json($student, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Create a new student
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'email' => 'required|email|unique:students,email',
+            'password' => 'required|min:6',
+            'fname' => 'required|string|max:45',
+            'lname' => 'required|string|max:45',
+            'dob' => 'required|date',
+            'phone' => 'nullable|string|max:15',
+            'mobile' => 'nullable|string|max:15',
+        ]);
+
+        $validatedData['password'] = Hash::make($validatedData['password']);
+
+        $student = Student::create($validatedData);
+        return response()->json($student, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(student $student)
+    // Update student info
+    public function update(Request $request, $id)
     {
-        //
+        $student = Student::find($id);
+        if (!$student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'email' => 'email|unique:students,email,' . $id . ',student_id',
+            'password' => 'nullable|min:6',
+            'fname' => 'string|max:45',
+            'lname' => 'string|max:45',
+            'dob' => 'date',
+            'phone' => 'nullable|string|max:15',
+            'mobile' => 'nullable|string|max:15',
+        ]);
+
+        if (isset($validatedData['password'])) {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        }
+
+        $student->update($validatedData);
+        return response()->json($student, 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(student $student)
+    // Delete a student
+    public function destroy($id)
     {
-        //
-    }
+        $student = Student::find($id);
+        if (!$student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, student $student)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(student $student)
-    {
-        //
+        $student->delete();
+        return response()->json(['message' => 'Student deleted'], 200);
     }
 }

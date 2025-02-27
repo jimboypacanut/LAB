@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class examresult extends Model
+class ExamResult extends Model
 {
-    //
+    use HasFactory;
+
+    protected $table = 'exam_results';
+    protected $fillable = ['exam_id', 'student_id', 'score'];
 }

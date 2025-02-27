@@ -11,9 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exams', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('exam', function (Blueprint $table) {
+            $table->id('exam_id'); // Auto-increment primary key
+            $table->unsignedBigInteger('exam_type_id'); // Foreign key to exam_types
+            $table->string('name', 45);
+            $table->date('start_date');
+
+            // Foreign key constraint
+            $table->foreign('exam_type_id')->references('exam_type_id')->on('exam_types')->onDelete('cascade');
+
+            $table->timestamps(); // Adds created_at and updated_at fields
         });
     }
 
@@ -22,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('exams');
+        Schema::dropIfExists('exam');
     }
 };
