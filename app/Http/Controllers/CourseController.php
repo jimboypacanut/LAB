@@ -21,7 +21,7 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'course_id' => 'required|integer|unique:course,course_id',
+            'course_id' => 'required|integer|unique:courses,course_id',
             'name' => 'required|string|max:45',
             'description' => 'required|string|max:45',
             'grade_id' => 'required|exists:grade,grade_id',

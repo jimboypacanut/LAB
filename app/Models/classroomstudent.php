@@ -10,5 +10,7 @@ class ClassroomStudent extends Model
     use HasFactory;
 
     protected $table = 'classroom_student';
+    protected $primaryKey = ['classroom_id', 'student_id'];
+    public $incrementing = false;
     protected $fillable = ['classroom_id', 'student_id'];
 }

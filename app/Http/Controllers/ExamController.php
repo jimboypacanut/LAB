@@ -21,7 +21,7 @@ class ExamController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'exam_type_id' => 'required|exists:exam_type,exam_type_id',
+            'exam_type_id' => 'required|exists:exam_types,exam_type_id',
             'name' => 'required|string|max:45',
             'start_date' => 'required|date',
         ]);
@@ -53,7 +53,7 @@ class ExamController extends Controller
         }
 
         $validatedData = $request->validate([
-            'exam_type_id' => 'exists:exam_type,exam_type_id',
+            'exam_type_id' => 'exists:exam_types,exam_type_id',
             'name' => 'string|max:45',
             'start_date' => 'date',
         ]);

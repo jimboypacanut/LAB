@@ -52,7 +52,7 @@ class StudentController extends Controller
         }
 
         $validatedData = $request->validate([
-            'email' => 'email|unique:students,email,' . $id . ',student_id',
+            'email' => 'email|unique:students,email,' . $id,
             'password' => 'nullable|min:6',
             'fname' => 'string|max:45',
             'lname' => 'string|max:45',

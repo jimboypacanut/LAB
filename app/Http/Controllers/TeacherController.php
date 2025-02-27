@@ -48,7 +48,7 @@ class TeacherController extends Controller
         }
 
         $validatedData = $request->validate([
-            'email' => 'email|unique:teachers,email,' . $id . ',teacher_id',
+            'email' => 'email|unique:teachers,email,' . $id,
             'password' => 'nullable|min:6',
             'fname' => 'string|max:45',
             'lname' => 'string|max:45',

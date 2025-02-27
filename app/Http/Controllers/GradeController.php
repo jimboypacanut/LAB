@@ -21,7 +21,7 @@ class GradeController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'grade_id' => 'required|integer|unique:grade,grade_id',
+            'grade_id' => 'required|integer|unique:grades,grade_id',
             'name' => 'required|string|max:45',
             'desc' => 'nullable|string|max:45',
         ]);

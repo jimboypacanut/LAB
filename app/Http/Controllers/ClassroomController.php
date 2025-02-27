@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classroom;
+use App\Models\Grade;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller

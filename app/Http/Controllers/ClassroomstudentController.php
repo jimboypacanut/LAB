@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassroomStudent;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
 class ClassroomStudentController extends Controller
@@ -23,10 +24,14 @@ class ClassroomStudentController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'classroom_id' => 'required|integer',
-            'student_id' => 'required|integer',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'classroom_id' => 'required|integer',
+                'student_id' => 'required|integer',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json($e->errors(), 422);
+        }
 
         $record = ClassroomStudent::create($validatedData);
         return response()->json($record, 201);
@@ -34,15 +39,19 @@ class ClassroomStudentController extends Controller
 
     public function update(Request $request, $id)
     {
+        try {
+            $validatedData = $request->validate([
+                'classroom_id' => 'integer',
+                'student_id' => 'integer',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json($e->errors(), 422);
+        }
+
         $record = ClassroomStudent::find($id);
         if (!$record) {
             return response()->json(['message' => 'Record not found'], 404);
         }
-
-        $validatedData = $request->validate([
-            'classroom_id' => 'integer',
-            'student_id' => 'integer',
-        ]);
 
         $record->update($validatedData);
         return response()->json($record, 200);

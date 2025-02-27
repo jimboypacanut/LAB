@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('classrooms', function (Blueprint $table) {
             $table->integer('classroom_id')->primary();
-            $table->year('year');
+            $table->integer('year');
             $table->unsignedBigInteger('grade_id'); // Foreign key reference
             $table->char('section', 2);
             $table->boolean('status');

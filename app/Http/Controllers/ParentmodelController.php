@@ -29,7 +29,7 @@ class ParentmodelController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'email' => 'required|email|unique:parent,email', // FIXED: Correct table name
+            'email' => 'required|email|unique:parentmodels,email', // FIXED: Correct table name
             'password' => 'required|min:6',
             'fname' => 'required|string|max:45',
             'lname' => 'required|string|max:45',
@@ -53,7 +53,7 @@ class ParentmodelController extends Controller
         }
 
         $validatedData = $request->validate([
-            'email' => 'email|unique:parent,email,' . $id . ',parent_id', // FIXED: Correct table name
+            'email' => 'email|unique:parentmodels,email,' . $id . ',parent_id', // FIXED: Correct table name
             'password' => 'nullable|min:6',
             'fname' => 'string|max:45',
             'lname' => 'string|max:45',

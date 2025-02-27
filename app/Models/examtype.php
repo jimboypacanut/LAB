@@ -12,3 +12,4 @@ class ExamType extends Model
     protected $table = 'exam_type';
     protected $fillable = ['name', 'desc'];
 }
+?>

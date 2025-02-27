@@ -52,8 +52,8 @@ class ExamTypeController extends Controller
         }
 
         $validatedData = $request->validate([
-            'name' => 'string|max:45',
-            'desc' => 'string|max:45',
+            'name' => 'nullable|string|max:45',
+            'desc' => 'nullable|string|max:45',
         ]);
 
         $examType->update($validatedData);

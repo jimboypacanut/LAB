@@ -11,4 +11,5 @@ class ExamResult extends Model
 
     protected $table = 'exam_results';
     protected $fillable = ['exam_id', 'student_id', 'score'];
+    protected $primaryKey = 'your_primary_key_column';
 }

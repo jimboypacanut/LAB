@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Student extends Authenticatable
 {
-    use HasFactory;
+    // use HasFactory; // Uncomment if you need factory support
 
     protected $table = 'student'; 
     protected $primaryKey = 'student_id'; 

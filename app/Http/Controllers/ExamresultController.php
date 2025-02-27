@@ -24,7 +24,7 @@ class ExamResultController extends Controller
             'exam_id' => 'required|exists:exams,id',
             'student_id' => 'required|exists:students,id',
             'course_id' => 'required|exists:courses,id',
-            'marks' => 'required|string|max:45',
+            'marks' => 'required|integer|max:100',
         ]);
 
         $examResult = ExamResult::create($validatedData);
@@ -57,7 +57,7 @@ class ExamResultController extends Controller
             'exam_id' => 'exists:exams,id',
             'student_id' => 'exists:students,id',
             'course_id' => 'exists:courses,id',
-            'marks' => 'string|max:45',
+            'marks' => 'integer|max:100',
         ]);
 
         $examResult->update($validatedData);
